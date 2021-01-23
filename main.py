@@ -1,4 +1,3 @@
-
 from ursina import *
 
 from myFirstPersonController import MyFirstPersonController
@@ -35,6 +34,19 @@ class Skybox(Entity):
             double_sided=True)
 
 
+class Bomb(Entity):
+    def __init__(self, position=(0, 0, 0)):
+        super().__init__(
+            parent=p,
+            position=position,
+            model='bomb',
+            scale=4,
+            texture='tnt',
+            color=color.white,
+            highlight_color=color.olive,
+        )
+
+
 class Ground(Button):
     def __init__(self, position=(0, 0, 0)):
         super().__init__(
@@ -46,15 +58,11 @@ class Ground(Button):
             color=color.white,
             highlight_color=color.olive,
         )
+
     def input(self, key):
         if self.hovered:
             if key == 'left mouse down':
-                pass
-                # Voxel(position=self.position + mouse.normal)
-
-            if key == 'right mouse down':
-                pass
-                # destroy(self)
+                Bomb(position=self.position + mouse.normal)
 
 
 class Wall(Button):
