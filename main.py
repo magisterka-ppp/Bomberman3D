@@ -40,6 +40,8 @@ window.exit_button.visible = False
 # Audio files
 snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
 snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
+player = MyFirstPersonController()
+
  # Create menu
 DropdownMenu('Menu', buttons=(
     DropdownMenuButton('New'),
@@ -50,7 +52,6 @@ DropdownMenu('Menu', buttons=(
     )),
     DropdownMenuButton('Exit'),
     ))
-
 class Skybox(Entity):
     def __init__(self):
         super().__init__(
@@ -81,7 +82,7 @@ class Ground(Button):
 
         if self.hovered:
             if key == 'left mouse down':
-                Bomb(scene, position=self.position + mouse.normal)
+                Bomb(player, scene, position=self.position + mouse.normal)
                 snd_putbomb.play()
 
 
@@ -96,12 +97,13 @@ class Bomber(Entity):
             texture='bomber',
             color=color.white,
         )
+        invoke(self.putBomb, delay=10)
 
-        def putBomb():
-            Bomb(scene, position=self.position)
-            invoke(putBomb, delay=10)
-
-        invoke(putBomb, delay=10)
+    def putBomb(self):
+        if self.is_empty():
+            return
+        Bomb(self, scene, position=self.position)
+        invoke(self.putBomb, delay=10)
 
 
 class Wall(Button):
@@ -143,8 +145,8 @@ enemy_table = []
 enemy_table.append(Bomber((5 * WORLD_SCALE, 1 * WORLD_SCALE, 5 * WORLD_SCALE)))
 
 scene.walls = walls
-scene.player = MyFirstPersonController()
 scene.app = app
+scene.player = player
 scene.enemy_table = enemy_table
 skybox = Skybox()
 
