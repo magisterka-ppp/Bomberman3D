@@ -31,7 +31,7 @@ class Bomber(Entity):
         ray = raycast(self.world_position, self.forward, ignore=(self,))
 
         if ray.distance <= 2.1:
-            print(self.world_rotation)
+            #print(self.world_rotation)
             self.rotation_y+=90*random.randrange(-1,1)
 
 
