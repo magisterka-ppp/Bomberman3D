@@ -17,7 +17,8 @@ class Bomber(Entity):
             xz = -1,
             direction = 1,
         )
-
+        self.x_speed = 0.1
+        self.z_speed  = 0.05
         invoke(self.putBomb, delay=10)
         invoke(self.changeDirection, delay=5)
 
@@ -32,12 +33,14 @@ class Bomber(Entity):
         self.direction *= -1
 
     def update(self):
-        ray = raycast(self.world_position, self.back, ignore=(self,))
+        self.world_rotation = +180
+        ray = raycast(self.world_position, self.left, ignore=(self,))
 
         if ray.distance <= 2.1:
-            self.changeDirection()
+            print("yeeeeeeeeeeettttttt")
+            print(self.world_rotation)
+            self.world_rotation=+180
 
-        if self.xz == 1:
-            self.position += (self.direction * time.dt * WORLD_SCALE,0,0)
-        else:
-            self.position += (0, 0, self.direction * time.dt * WORLD_SCALE)
+
+        self.position += self.right*time.dt
+
