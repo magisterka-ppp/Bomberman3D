@@ -21,7 +21,7 @@ class Bomber(Entity):
     def putBomb(self):
         if self.is_empty():
             return
-        Bomb(self, scene, position=self.position)
+        Bomb(self, scene, position=self.position-self.model_bounds)
         invoke(self.putBomb, delay=10)
 
     def update(self):
