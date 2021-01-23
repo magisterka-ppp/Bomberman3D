@@ -9,15 +9,13 @@ class Bomber(Entity):
         super().__init__(
             parent=scene,
             position=position,
-            model='bombero',
-            scale=4 * WORLD_SCALE,
+            model='enemy',
+            scale= WORLD_SCALE/4,
             collider='box',
-            texture='bomber',
+            texture='GhostlingUV',
             color=color.white,
             rotation=(0, 0, 0)
         )
-        self.x_speed = 0.1
-        self.z_speed = 0.05
         invoke(self.putBomb, delay=10)
 
     def putBomb(self):
@@ -27,11 +25,10 @@ class Bomber(Entity):
         invoke(self.putBomb, delay=10)
 
     def update(self):
-        ray = raycast(self.world_position, self.forward, ignore=(self,))
+        ray = raycast(self.world_position, self.back, ignore=(self,))
 
         if ray.distance <= 2.1:
-            print('collision')
             self.rotation_y += 90 + 180 * random.randrange(0, 2)
             return
 
-        self.position += self.forward * time.dt * 0.5
+        self.position += self.back * time.dt * 4
