@@ -3,6 +3,7 @@ from ursina import mouse
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 
 from bomb import Bomb
+from bomber import Bomber
 from constants import WORLD_SCALE
 from myFirstPersonController import MyFirstPersonController
 
@@ -87,39 +88,6 @@ class Ground(Button):
                 snd_putbomb.play()
 
 
-class Bomber(Entity):
-    def __init__(self, position=(0, 0, 0)):
-        super().__init__(
-            parent=scene,
-            position=position,
-            model='bombero',
-            scale= 5 * WORLD_SCALE,
-            texture='bomber',
-            color=color.white,
-            xz = 1,
-            direction = 1,
-        )
-        invoke(self.putBomb, delay=10)
-        invoke(self.changeDirection, delay=5)
-
-    def putBomb(self):
-        if self.is_empty():
-            return
-        Bomb(self, scene, position=self.position)
-        invoke(self.putBomb, delay=10)
-
-    def changeDirection(self):
-        self.xz *= -1
-        self.direction *= -1
-        invoke(self.changeDirection, delay=5)
-
-    def update(self):
-        if self.xz == 1:
-            self.position += (self.direction * time.dt * WORLD_SCALE,0,0)
-        else:
-            self.position += (0, 0, self.direction * time.dt * WORLD_SCALE)
-
-
 class Wall(Button):
     def __init__(self, position=(0, 0, 0)):
         super().__init__(
@@ -156,7 +124,7 @@ for z in range(world_size_z):
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
 enemy_table = []
-enemy_table.append(Bomber((1 * WORLD_SCALE, 3 * WORLD_SCALE, 1 * WORLD_SCALE)))
+enemy_table.append(Bomber(scene, (2 * WORLD_SCALE, 6 * WORLD_SCALE, 2 * WORLD_SCALE)))
 
 scene.walls = walls
 scene.app = app

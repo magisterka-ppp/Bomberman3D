@@ -9,7 +9,7 @@ class MyFirstPersonController(FirstPersonController):
         super().__init__()
         self.jump_duration = 0
         self.collider = 'box'
-        self.position = (1*WORLD_SCALE, 1*WORLD_SCALE, 1*WORLD_SCALE)
+        self.position = (0*WORLD_SCALE, 6*WORLD_SCALE, 0*WORLD_SCALE)
 
 
     def input(self, key):

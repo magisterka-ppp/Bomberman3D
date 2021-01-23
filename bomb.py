@@ -55,11 +55,3 @@ class Bomb(Entity):
         self.prev_texture = self.texture
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, owner, scene, delay=2)
-        invoke(self.bomb_blink, delay=0.2)
-
-    def bomb_blink(self):
-        if self.texture == self.prev_texture:
-            self.texture = None
-        else:
-            self.texture = self.prev_texture
-        invoke(self.bomb_blink, delay=0.1)
