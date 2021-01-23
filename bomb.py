@@ -23,8 +23,8 @@ class Explosion(Entity):
         for wall in scene.walls:
             if wall.intersects(self).hit:
                 destroy(wall)
-            if scene.player.intersects(self).hit and scene.player is not owner:
-                application.quit()
+        if scene.player.intersects(self).hit:
+            application.quit()
         for enemy in scene.enemy_table:
             if enemy.intersects(self).hit and owner is not enemy:
 

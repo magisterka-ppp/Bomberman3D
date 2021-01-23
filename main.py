@@ -1,5 +1,5 @@
 from ursina import *
-from ursina import mouse, curve
+from ursina import mouse
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 
 from bomb import Bomb
@@ -42,7 +42,7 @@ snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
 snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
 player = MyFirstPersonController()
 
- # Create menu
+# Create menu
 DropdownMenu('Menu', buttons=(
     DropdownMenuButton('New'),
     DropdownMenuButton('Options'),
@@ -51,7 +51,9 @@ DropdownMenu('Menu', buttons=(
         DropdownMenuButton('Option b'),
     )),
     DropdownMenuButton('Exit'),
-    ))
+))
+
+
 class Skybox(Entity):
     def __init__(self):
         super().__init__(
@@ -74,7 +76,6 @@ class Ground(Button):
             color=color.white,
             highlight_color=color.olive,
         )
-        self.walls = walls
 
     def input(self, key):
         if key == 'escape':
