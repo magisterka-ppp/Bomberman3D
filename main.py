@@ -1,5 +1,6 @@
 from ursina import *
 from ursina import mouse, curve
+from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 
 from bomb import Bomb
 from constants import WORLD_SCALE
@@ -39,7 +40,16 @@ window.exit_button.visible = False
 # Audio files
 snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
 snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
-
+ # Create menu
+DropdownMenu('Menu', buttons=(
+    DropdownMenuButton('New'),
+    DropdownMenuButton('Options'),
+    DropdownMenu('Options', buttons=(
+        DropdownMenuButton('Option a'),
+        DropdownMenuButton('Option b'),
+    )),
+    DropdownMenuButton('Exit'),
+    ))
 
 class Skybox(Entity):
     def __init__(self):
@@ -48,7 +58,7 @@ class Skybox(Entity):
             texture='skybox',
             scale=500,
             double_sided=True)
-        snd_bg.play()
+        Text('Press W, A, S, D to control character and left mouse button to place bomb.', origin=(0, -.5), y=-.4)
 
 
 class Ground(Button):
@@ -66,6 +76,9 @@ class Ground(Button):
         self.walls = walls
 
     def input(self, key):
+        if key == 'escape':
+            exit()
+
         if self.hovered:
             if key == 'left mouse down':
                 Bomb(scene, position=self.position + mouse.normal)
