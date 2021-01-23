@@ -1,9 +1,10 @@
 from ursina import *
-from ursina import mouse, curve
+from ursina import mouse, curve, camera
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 
 from bomb import Bomb
 from constants import WORLD_SCALE
+from inventory import Inventory
 from myFirstPersonController import MyFirstPersonController
 
 app = Ursina()
@@ -40,16 +41,36 @@ window.exit_button.visible = False
 # Audio files
 snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
 snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
+
  # Create menu
-DropdownMenu('Menu', buttons=(
-    DropdownMenuButton('New'),
-    DropdownMenuButton('Options'),
-    DropdownMenu('Options', buttons=(
-        DropdownMenuButton('Option a'),
-        DropdownMenuButton('Option b'),
-    )),
-    DropdownMenuButton('Exit'),
-    ))
+class Menu(DropdownMenu):
+    def __init__(self, name):
+        super().__init__(
+            text=name,
+            buttons=(
+                DropdownMenuButton('New'),
+                DropdownMenu('Options', buttons=(
+                    DropdownMenuButton('Option a'),
+                    DropdownMenuButton('Option b'),
+                )),
+                DropdownMenu('Help'),
+                DropdownMenuButton('Exit'),
+            ),
+        )
+        self.is_open = False
+
+    def input(self, key):
+        if key == 'tab':
+            if self.is_open == False:
+                self.open()
+                self.is_open = True
+            else:
+                self.close()
+                self.is_open = False
+        if key == 'arrow_right':
+            ...
+    def update(self):
+        ...
 
 class Skybox(Entity):
     def __init__(self):
@@ -139,13 +160,33 @@ for z in range(world_size_z):
         if current_map[z][x] == 2:
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
-enemy_table = []
-enemy_table.append(Bomber((5 * WORLD_SCALE, 1 * WORLD_SCALE, 5 * WORLD_SCALE)))
+if __name__ == '__main__':
 
-scene.walls = walls
-scene.player = MyFirstPersonController()
-scene.app = app
-scene.enemy_table = enemy_table
-skybox = Skybox()
+    enemy_table = []
+    enemy_table.append(Bomber((5 * WORLD_SCALE, 1 * WORLD_SCALE, 5 * WORLD_SCALE)))
 
-app.run()
+    scene.walls = walls
+    scene.player = MyFirstPersonController()
+    scene.app = app
+    scene.enemy_table = enemy_table
+    skybox = Skybox()
+
+    inventory = Inventory()
+    menu = Menu("Menu")
+
+    def add_item():
+        inventory.append(random.choice(('bag', 'bow_arrow', 'gem', 'orb', 'sword')))
+
+
+    for i in range(7):
+        add_item()
+
+    add_item_button = Button(
+        scale=(.1, .1),
+        x=-.5,
+        color=color.lime.tint(-.25),
+        text='+',
+        tooltip=Tooltip('Add random item'),
+        on_click=add_item
+    )
+    app.run()
