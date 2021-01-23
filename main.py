@@ -8,11 +8,11 @@ world_size_z = 10
 current_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -45,6 +45,17 @@ class Bomb(Entity):
             color=color.white,
             highlight_color=color.olive,
         )
+    def input(self, key):
+        if key == 'right mouse down':
+            Wall.destroys(Wall, position=self.position + (0, 0, 1))
+            Wall.destroys(Wall,position=self.position + (1, 0, 0))
+            Wall.destroys(Wall,position=self.position + (1, 0, 1))
+            Wall.destroys(Wall,position=self.position + (0, 0, -1))
+            Wall.destroys(Wall,position=self.position + (-1, 0, 0))
+            Wall.destroys(Wall,position=self.position + (-1, 0, -1))
+            Wall.destroys(Wall,position=self.position + (-1, 0, 1))
+            Wall.destroys(Wall,position=self.position + (1, 0, -1))
+            destroy(self)
 
 
 class Ground(Button):
@@ -75,6 +86,9 @@ class Wall(Button):
             texture='stone',
             color=color.white,
         )
+    def destroys(self, position):
+        if position == self.position:
+            destroy(self)
 
 
 for z in range(world_size_z):
