@@ -8,10 +8,10 @@ distance_x = 2.1
 
 
 class Explosion(Entity):
-    def explode(self, walls):
+    def explode(self):
         destroy(self.parent)
 
-    def __init__(self, parent, walls, scale=1, position=(0, 0, 0)):
+    def __init__(self, parent, scene, scale=1, position=(0, 0, 0)):
         super().__init__(
             parent=parent,
             position=[x * scale for x in position],
@@ -21,10 +21,16 @@ class Explosion(Entity):
             texture='l0',
             color=color.white,
         )
-        for wall in walls:
+        for wall in scene.walls:
             if wall.intersects(self).hit:
                 destroy(wall)
-        invoke(self.explode, walls, delay=.5)
+            if scene.player.intersects(self).hit:
+                application.quit()
+        for enemy in scene.enemy_table:
+            if enemy.intersects(self).hit:
+                print("hhhh")
+                destroy(enemy)
+        invoke(self.explode, delay=.5)
 
 
 class Bomb(Entity):
@@ -37,7 +43,7 @@ class Bomb(Entity):
             Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, i * distance_x + 1))
             Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, -i * distance_x - 1))
 
-    def __init__(self, walls, position=(0, 0, 0)):
+    def __init__(self, scene, position=(0, 0, 0)):
         position[1] += (WORLD_SCALE-1.2)
         super().__init__(
             parent=scene,
@@ -49,7 +55,7 @@ class Bomb(Entity):
             highlight_color=color.olive,
         )
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
-        invoke(self.explode, walls, delay=2)
+        invoke(self.explode, scene, delay=2)
 
     def putBomb(self):
-        Bomb(walls, position=self.position);
+        Bomb(self.scene, position=self.position)

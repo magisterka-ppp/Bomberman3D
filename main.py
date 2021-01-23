@@ -33,8 +33,6 @@ world_size_x = len(current_map[0])
 world_size_z = len(current_map)
 Texture.default_filtering = None
 
-player = MyFirstPersonController()
-p = Entity()
 window.fps_counter.enabled = True
 window.exit_button.visible = False
 
@@ -54,9 +52,9 @@ class Skybox(Entity):
 
 
 class Ground(Button):
-    def __init__(self, walls=[], position=(0, 0, 0)):
+    def __init__(self, scene, position=(0, 0, 0)):
         super().__init__(
-            parent=p,
+            parent=scene,
             position=position,
             model='cube',
             scale=WORLD_SCALE,
@@ -70,8 +68,9 @@ class Ground(Button):
     def input(self, key):
         if self.hovered:
             if key == 'left mouse down':
-                Bomb(walls, position=self.position + mouse.normal)
+                Bomb(scene, position=self.position + mouse.normal)
                 snd_putbomb.play()
+
 
 class Bomber(Entity):
     def __init__(self, position=(0, 0, 0)):
@@ -79,14 +78,18 @@ class Bomber(Entity):
             parent=scene,
             position=position,
             model='bomber',
-            scale=5* WORLD_SCALE,
+            collider='box',
+            scale=5 * WORLD_SCALE,
             texture='bomber',
             color=color.white,
         )
+
         def putBomb():
-            Bomb(walls, position=self.position)
+            Bomb(scene, position=self.position)
             invoke(putBomb, delay=10)
+
         invoke(putBomb, delay=10)
+
 
 class Wall(Button):
     def __init__(self, position=(0, 0, 0)):
@@ -117,13 +120,19 @@ class HardWall(Button):
 walls = []
 for z in range(world_size_z):
     for x in range(world_size_x):
-        Ground(walls, (x * WORLD_SCALE, 0, z * WORLD_SCALE))
+        Ground(scene, (x * WORLD_SCALE, 0, z * WORLD_SCALE))
         if current_map[z][x] == 1:
             walls.append(Wall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE)))
         if current_map[z][x] == 2:
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
+enemy_table = []
+enemy_table.append(Bomber((5 * WORLD_SCALE, 1 * WORLD_SCALE, 5 * WORLD_SCALE)))
 
+scene.walls = walls
+scene.player = MyFirstPersonController()
+scene.app = app
+scene.enemy_table = enemy_table
 skybox = Skybox()
-Bomber((5* WORLD_SCALE, 1* WORLD_SCALE, 5* WORLD_SCALE))
+
 app.run()
