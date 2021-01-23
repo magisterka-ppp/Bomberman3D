@@ -41,7 +41,7 @@ class Skybox(Entity):
 
 
 class Ground(Button):
-    def __init__(self, position=(0, 0, 0)):
+    def __init__(self, walls=[], position=(0, 0, 0)):
         super().__init__(
             parent=p,
             position=position,
@@ -51,18 +51,20 @@ class Ground(Button):
             color=color.white,
             highlight_color=color.olive,
         )
+        self.walls = walls
 
     def input(self, key):
         if self.hovered:
             if key == 'left mouse down':
-                Bomb(position=self.position + mouse.normal)
+                Bomb(walls, position=self.position + mouse.normal)
                 snd_putbomb.play()
+
 
 
 class Wall(Button):
     def __init__(self, position=(0, 0, 0)):
         super().__init__(
-            parent=p,
+            parent=scene,
             position=position,
             model='cube',
             scale_y=5,
@@ -71,11 +73,12 @@ class Wall(Button):
         )
 
 
+walls = []
 for z in range(world_size_z):
     for x in range(world_size_x):
-        Ground(position=(x, 0, z))
+        Ground(walls, (x, 0, z))
         if current_map[z][x] == 1:
-            Wall(position=(x, 1, z))
+            walls.append(Wall((x, 1, z)))
 
 skybox = Skybox()
 

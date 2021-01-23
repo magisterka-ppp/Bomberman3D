@@ -1,35 +1,49 @@
 from ursina import *
 
+distance_y = -0.2
+
+distance_x = 2.1
+
+
 class Explosion(Entity):
-    def explode(self):
+    def explode(self, walls):
         destroy(self.parent)
 
-    def __init__(self, parent):
+    def __init__(self, parent, walls, scale=1, position=(0, 0, 0)):
         super().__init__(
             parent=parent,
-            position=(0, 0, 0),
-            size=1.4,
+            position=[x * scale for x in position],
+            scale=scale,
             model='sphere',
+            collider='sphere',
             texture='l0',
             color=color.white,
         )
-        invoke(self.explode, delay=1)
+        for wall in walls:
+            if wall.intersects(self).hit:
+                destroy(wall)
+        invoke(self.explode, walls, delay=.5)
 
 
 class Bomb(Entity):
-    def explode(self):
+    def explode(self, walls):
         self.snd_explode.play()
-        Explosion(self)
+        Explosion(self, walls, .9)
+        for i in range(4):
+            Explosion(self, walls, .5 / (i + 1), (i * distance_x + 1, distance_y * i, 0))
+            Explosion(self, walls, .5 / (i + 1), (-i * distance_x - 1, distance_y * i, 0))
+            Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, i * distance_x + 1))
+            Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, -i * distance_x - 1))
 
-    def __init__(self, position=(0, 0, 0)):
+    def __init__(self, walls, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
             model='bomb',
-            scale=4,
+            scale=3,
             texture='tnt',
             color=color.white,
             highlight_color=color.olive,
         )
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
-        invoke(self.explode, delay=2)
+        invoke(self.explode, walls, delay=2)
