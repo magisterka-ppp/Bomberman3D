@@ -10,7 +10,7 @@ class Bomber(Entity):
             parent=scene,
             position=position,
             model='bombero',
-            scale= 2 * WORLD_SCALE,
+            scale= 4* WORLD_SCALE,
             collider ='box',
             texture='bomber',
             color=color.white,
