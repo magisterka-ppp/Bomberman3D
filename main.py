@@ -1,5 +1,6 @@
 from ursina import *
 
+from bomb import Bomb
 from myFirstPersonController import MyFirstPersonController
 
 app = Ursina()
@@ -32,19 +33,6 @@ class Skybox(Entity):
             texture='skybox',
             scale=150,
             double_sided=True)
-
-
-class Bomb(Entity):
-    def __init__(self, position=(0, 0, 0)):
-        super().__init__(
-            parent=p,
-            position=position,
-            model='bomb',
-            scale=4,
-            texture='tnt',
-            color=color.white,
-            highlight_color=color.olive,
-        )
 
 
 class Ground(Button):
