@@ -16,7 +16,7 @@ class Explosion(Entity):
             position=[x * scale for x in position],
             scale=scale,
             model='sphere',
-            collider='sphere',
+            collider='box',
             texture='l0',
             color=color.white,
         )
@@ -47,6 +47,7 @@ class Bomb(Entity):
             parent=scene,
             position=position,
             model='bomb',
+            collider='box',
             scale=3 * WORLD_SCALE,
             texture='tnt',
             color=color.white,

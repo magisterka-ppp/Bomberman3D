@@ -84,6 +84,7 @@ class Ground(Button):
             exit()
 
         if self.hovered:
+            print(mouse.normal)
             if key == 'left mouse down':
                 Bomb(player, scene, position=self.position + mouse.normal)
                 snd_putbomb.play()
