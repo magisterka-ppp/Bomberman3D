@@ -27,7 +27,6 @@ class Explosion(Entity):
             application.quit()
         for enemy in scene.enemy_table:
             if enemy.intersects(self).hit and owner is not enemy:
-
                 destroy(enemy)
         invoke(self.explode, delay=.5)
 
@@ -35,7 +34,7 @@ class Explosion(Entity):
 class Bomb(Entity):
     def explode(self, owner, scene):
         self.snd_explode.play()
-        Explosion(self,owner , scene, .9)
+        Explosion(self, owner, scene, .9)
         for i in range(4):
             Explosion(self, owner, scene, .5 / (i + 1), (i * distance_x + 1, distance_y * i, 0))
             Explosion(self, owner, scene, .5 / (i + 1), (-i * distance_x - 1, distance_y * i, 0))
@@ -53,5 +52,14 @@ class Bomb(Entity):
             color=color.white,
             highlight_color=color.olive,
         )
+        self.prev_texture = self.texture
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, owner, scene, delay=2)
+        invoke(self.bomb_blink, delay=0.2)
+
+    def bomb_blink(self):
+        if self.texture == self.prev_texture:
+            self.texture = None
+        else:
+            self.texture = self.prev_texture
+        invoke(self.bomb_blink, delay=0.1)

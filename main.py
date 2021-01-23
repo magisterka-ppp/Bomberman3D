@@ -92,8 +92,8 @@ class Bomber(Entity):
         super().__init__(
             parent=scene,
             position=position,
-            model='bomber',
-            scale=5 * WORLD_SCALE,
+            model='bombero',
+            scale= 5 * WORLD_SCALE,
             texture='bomber',
             color=color.white,
             xz = 1,
@@ -156,7 +156,7 @@ for z in range(world_size_z):
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
 enemy_table = []
-enemy_table.append(Bomber((5 * WORLD_SCALE, 1 * WORLD_SCALE, 5 * WORLD_SCALE)))
+enemy_table.append(Bomber((1 * WORLD_SCALE, 3 * WORLD_SCALE, 1 * WORLD_SCALE)))
 
 scene.walls = walls
 scene.app = app
