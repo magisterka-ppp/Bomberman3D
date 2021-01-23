@@ -1,5 +1,7 @@
 from ursina import *
 
+from constants import WORLD_SCALE
+
 distance_y = -0.2
 
 distance_x = 2.1
@@ -36,11 +38,12 @@ class Bomb(Entity):
             Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, -i * distance_x - 1))
 
     def __init__(self, walls, position=(0, 0, 0)):
+        position[1] += (WORLD_SCALE-1.2)
         super().__init__(
             parent=scene,
             position=position,
             model='bomb',
-            scale=3,
+            scale=3*WORLD_SCALE,
             texture='tnt',
             color=color.white,
             highlight_color=color.olive,

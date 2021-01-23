@@ -2,23 +2,35 @@ from ursina import *
 from ursina import mouse, curve
 
 from bomb import Bomb
+from constants import WORLD_SCALE
 from myFirstPersonController import MyFirstPersonController
 
 app = Ursina()
-world_size_x = 10
-world_size_z = 10
 current_map = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
-    [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    [2, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+    [2, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+    [2, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 2],
+    [2, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 2],
+    [2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 2],
+    [2, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 2],
+    [2, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+    [2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 2],
+    [2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 2],
+    [2, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 2],
+    [2, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 2],
+    [2, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 2],
+    [2, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 2],
+    [2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2],
+    [2, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 2],
+    [2, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 ]
+
+world_size_x = len(current_map[0])
+world_size_z = len(current_map)
 Texture.default_filtering = None
 
 player = MyFirstPersonController()
@@ -30,12 +42,13 @@ window.exit_button.visible = False
 snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
 snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
 
+
 class Skybox(Entity):
     def __init__(self):
         super().__init__(
             model='sphere',
             texture='skybox',
-            scale=150,
+            scale=500,
             double_sided=True)
         snd_bg.play()
 
@@ -46,7 +59,8 @@ class Ground(Button):
             parent=p,
             position=position,
             model='cube',
-            scale_y=1,
+            scale=WORLD_SCALE,
+            scale_y=1 * WORLD_SCALE,
             texture='dirt',
             color=color.white,
             highlight_color=color.olive,
@@ -60,15 +74,28 @@ class Ground(Button):
                 snd_putbomb.play()
 
 
-
 class Wall(Button):
     def __init__(self, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
             model='cube',
-            scale_y=5,
+            scale=WORLD_SCALE,
+            scale_y=5 * WORLD_SCALE,
             texture='stone',
+            color=color.white,
+        )
+
+
+class HardWall(Button):
+    def __init__(self, position=(0, 0, 0)):
+        super().__init__(
+            parent=scene,
+            position=position,
+            model='cube',
+            scale=WORLD_SCALE,
+            scale_y=7 * WORLD_SCALE,
+            texture='wood',
             color=color.white,
         )
 
@@ -76,9 +103,11 @@ class Wall(Button):
 walls = []
 for z in range(world_size_z):
     for x in range(world_size_x):
-        Ground(walls, (x, 0, z))
+        Ground(walls, (x * WORLD_SCALE, 0, z * WORLD_SCALE))
         if current_map[z][x] == 1:
-            walls.append(Wall((x, 1, z)))
+            walls.append(Wall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE)))
+        if current_map[z][x] == 2:
+            HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
 skybox = Skybox()
 
