@@ -84,10 +84,11 @@ class Ground(Button):
             exit()
 
         if self.hovered:
-            print(mouse.normal)
-            if key == 'left mouse down':
-                Bomb(player, scene, position=self.position + mouse.normal)
-                snd_putbomb.play()
+            position = self.position - player.position
+            if abs(position.x) < 20 and abs(position.z) < 20:
+                if key == 'left mouse down':
+                    Bomb(player, scene, position=self.position + mouse.normal)
+                    snd_putbomb.play()
 
 
 class Wall(Button):
