@@ -92,18 +92,31 @@ class Bomber(Entity):
             parent=scene,
             position=position,
             model='bomber',
-            collider='box',
             scale=5 * WORLD_SCALE,
             texture='bomber',
             color=color.white,
+            xz = 1,
+            direction = 1,
         )
         invoke(self.putBomb, delay=10)
+        invoke(self.changeDirection, delay=5)
 
     def putBomb(self):
         if self.is_empty():
             return
         Bomb(self, scene, position=self.position)
         invoke(self.putBomb, delay=10)
+
+    def changeDirection(self):
+        self.xz *= -1
+        self.direction *= -1
+        invoke(self.changeDirection, delay=5)
+
+    def update(self):
+        if self.xz == 1:
+            self.position += (self.direction * time.dt * WORLD_SCALE,0,0)
+        else:
+            self.position += (0, 0, self.direction * time.dt * WORLD_SCALE)
 
 
 class Wall(Button):
