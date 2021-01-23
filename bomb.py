@@ -9,7 +9,6 @@ class Explosion(Entity):
         super().__init__(
             parent=parent,
             position=(0, 0, 0),
-            size=1.4,
             model='sphere',
             texture='l0',
             color=color.white,
@@ -18,17 +17,21 @@ class Explosion(Entity):
 
 
 class Bomb(Entity):
-    def explode(self):
+    def explode(self, walls):
+        for wall in walls:
+            if wall.intersects(self).hit:
+                destroy(wall)
         Explosion(self)
 
-    def __init__(self, position=(0, 0, 0)):
+    def __init__(self, walls, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
             model='bomb',
+            collider='sphere',
             scale=4,
             texture='tnt',
             color=color.white,
             highlight_color=color.olive,
         )
-        invoke(self.explode, delay=2)
+        invoke(self.explode, walls, delay=2)
