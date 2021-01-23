@@ -5,19 +5,19 @@ from constants import WORLD_SCALE
 
 
 class Bomber(Entity):
-    def __init__(self, scene , position=(0, 0, 0)):
+    def __init__(self, scene, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
             model='bombero',
-            scale= 4* WORLD_SCALE,
-            collider ='box',
+            scale=4 * WORLD_SCALE,
+            collider='box',
             texture='bomber',
             color=color.white,
-            rotation=(0,0,0)
+            rotation=(0, 0, 0)
         )
         self.x_speed = 0.1
-        self.z_speed  = 0.05
+        self.z_speed = 0.05
         invoke(self.putBomb, delay=10)
 
     def putBomb(self):
@@ -26,14 +26,12 @@ class Bomber(Entity):
         Bomb(self, scene, position=self.position)
         invoke(self.putBomb, delay=10)
 
-
     def update(self):
         ray = raycast(self.world_position, self.forward, ignore=(self,))
 
         if ray.distance <= 2.1:
-            print(self.world_rotation)
-            self.rotation_y+=90*random.randrange(-1,1)
+            print('collision')
+            self.rotation_y += 90 + 180 * random.randrange(0, 2)
+            return
 
-
-        self.position += self.forward*time.dt*0.5
-
+        self.position += self.forward * time.dt * 0.5
