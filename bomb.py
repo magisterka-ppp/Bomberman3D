@@ -26,13 +26,14 @@ class Explosion(Entity):
 
 
 class Bomb(Entity):
-    def explode(self, walls):
-        Explosion(self, walls, .9)
+    def explode(self):
+        self.snd_explode.play()
+        Explosion(self)
         for i in range(4):
-            Explosion(self, walls, .5 / (i+1), (i * distance_x + 1, distance_y * i, 0))
-            Explosion(self, walls, .5 / (i+1), (-i * distance_x - 1, distance_y * i, 0))
-            Explosion(self, walls, .5 / (i+1), (0, distance_y * i, i * distance_x + 1))
-            Explosion(self, walls, .5 / (i+1), (0, distance_y * i, -i * distance_x - 1))
+            Explosion(self, walls, .5 / (i + 1), (i * distance_x + 1, distance_y * i, 0))
+            Explosion(self, walls, .5 / (i + 1), (-i * distance_x - 1, distance_y * i, 0))
+            Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, i * distance_x + 1))
+            Explosion(self, walls, .5 / (i + 1), (0, distance_y * i, -i * distance_x - 1))
 
     def __init__(self, walls, position=(0, 0, 0)):
         super().__init__(
@@ -44,4 +45,5 @@ class Bomb(Entity):
             color=color.white,
             highlight_color=color.olive,
         )
-        invoke(self.explode, walls, delay=2)
+        self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
+        invoke(self.explode, delay=2)
