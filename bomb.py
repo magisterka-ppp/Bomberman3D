@@ -50,3 +50,6 @@ class Bomb(Entity):
         )
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, walls, delay=2)
+
+    def putBomb(self):
+        Bomb(walls, position=self.position);

@@ -73,6 +73,20 @@ class Ground(Button):
                 Bomb(walls, position=self.position + mouse.normal)
                 snd_putbomb.play()
 
+class Bomber(Entity):
+    def __init__(self, position=(0, 0, 0)):
+        super().__init__(
+            parent=scene,
+            position=position,
+            model='bomber',
+            scale=5* WORLD_SCALE,
+            texture='bomber',
+            color=color.white,
+        )
+        def putBomb():
+            Bomb(walls, position=self.position)
+            invoke(putBomb, delay=10)
+        invoke(putBomb, delay=10)
 
 class Wall(Button):
     def __init__(self, position=(0, 0, 0)):
@@ -109,6 +123,7 @@ for z in range(world_size_z):
         if current_map[z][x] == 2:
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
-skybox = Skybox()
 
+skybox = Skybox()
+Bomber((5* WORLD_SCALE, 1* WORLD_SCALE, 5* WORLD_SCALE))
 app.run()
