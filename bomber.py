@@ -14,13 +14,11 @@ class Bomber(Entity):
             collider ='box',
             texture='bomber',
             color=color.white,
-            xz = -1,
-            direction = 1,
+            rotation=(0,0,0)
         )
         self.x_speed = 0.1
         self.z_speed  = 0.05
         invoke(self.putBomb, delay=10)
-        invoke(self.changeDirection, delay=5)
 
     def putBomb(self):
         if self.is_empty():
@@ -28,19 +26,14 @@ class Bomber(Entity):
         Bomb(self, scene, position=self.position)
         invoke(self.putBomb, delay=10)
 
-    def changeDirection(self):
-        self.xz *= -1
-        self.direction *= -1
 
     def update(self):
-        self.world_rotation = +180
-        ray = raycast(self.world_position, self.left, ignore=(self,))
+        ray = raycast(self.world_position, self.forward, ignore=(self,))
 
         if ray.distance <= 2.1:
-            print("yeeeeeeeeeeettttttt")
             print(self.world_rotation)
-            self.world_rotation=+180
+            self.rotation_y+=90*random.randrange(-1,1)
 
 
-        self.position += self.right*time.dt
+        self.position += self.forward*time.dt*0.5
 

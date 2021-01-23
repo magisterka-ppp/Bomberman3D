@@ -124,7 +124,7 @@ for z in range(world_size_z):
             HardWall((x * WORLD_SCALE, 1 * WORLD_SCALE, z * WORLD_SCALE))
 
 enemy_table = []
-enemy_table.append(Bomber(scene, (2 * WORLD_SCALE, 4 * WORLD_SCALE, 2 * WORLD_SCALE)))
+enemy_table.append(Bomber(scene, (5 * WORLD_SCALE, 2 * WORLD_SCALE, 5 * WORLD_SCALE)))
 
 scene.walls = walls
 scene.app = app
