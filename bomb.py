@@ -1,6 +1,5 @@
 from ursina import *
 
-
 class Explosion(Entity):
     def explode(self):
         destroy(self.parent)
@@ -19,6 +18,7 @@ class Explosion(Entity):
 
 class Bomb(Entity):
     def explode(self):
+        self.snd_explode.play()
         Explosion(self)
 
     def __init__(self, position=(0, 0, 0)):
@@ -31,4 +31,5 @@ class Bomb(Entity):
             color=color.white,
             highlight_color=color.olive,
         )
+        self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, delay=2)

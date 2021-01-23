@@ -1,4 +1,5 @@
 from ursina import *
+from ursina import mouse, curve
 
 from bomb import Bomb
 from myFirstPersonController import MyFirstPersonController
@@ -25,6 +26,9 @@ p = Entity()
 window.fps_counter.enabled = True
 window.exit_button.visible = False
 
+# Audio files
+snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
+snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
 
 class Skybox(Entity):
     def __init__(self):
@@ -33,6 +37,7 @@ class Skybox(Entity):
             texture='skybox',
             scale=150,
             double_sided=True)
+        snd_bg.play()
 
 
 class Ground(Button):
@@ -51,6 +56,7 @@ class Ground(Button):
         if self.hovered:
             if key == 'left mouse down':
                 Bomb(position=self.position + mouse.normal)
+                snd_putbomb.play()
 
 
 class Wall(Button):
