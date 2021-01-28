@@ -5,35 +5,30 @@ from constants import WORLD_SCALE
 
 
 class Bomber(Entity):
-    def __init__(self, scene , position=(0, 0, 0)):
+    def __init__(self, scene, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
-            model='bombero',
-            scale= 4* WORLD_SCALE,
-            collider ='box',
-            texture='bomber',
+            model='enemy',
+            scale= WORLD_SCALE/4,
+            collider='box',
+            texture='GhostlingUV',
             color=color.white,
-            rotation=(0,0,0)
+            rotation=(0, 0, 0)
         )
-        self.x_speed = 0.1
-        self.z_speed  = 0.05
         invoke(self.putBomb, delay=10)
 
     def putBomb(self):
         if self.is_empty():
             return
-        Bomb(self, scene, position=self.position)
+        Bomb(self, scene, position=self.position-self.model_bounds)
         invoke(self.putBomb, delay=10)
 
-
     def update(self):
-        ray = raycast(self.world_position, self.forward, ignore=(self,))
+        ray = raycast(self.world_position, self.back, ignore=(self,))
 
         if ray.distance <= 2.1:
-            #print(self.world_rotation)
-            self.rotation_y+=90*random.randrange(-1,1)
+            self.rotation_y += 90 + 180 * random.randrange(0, 2)
+            return
 
-
-        self.position += self.forward*time.dt*0.5
-
+        self.position += self.back * time.dt * 4
