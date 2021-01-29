@@ -1,28 +1,57 @@
 from ursina import *
-
 from constants import WORLD_SCALE
-
-distance_y = -0.2
-distance_x = 2.1
 
 
 class Explosion(Entity):
-    def explode(self):
-        destroy(self.parent)
-
-    def __init__(self, parent, owner, scene, scale=1, position=(0, 0, 0)):
+    def __init__(self, parent, owner, scene, position=(0, 0, 0)):
         super().__init__(
             parent=parent,
-            position=[x * scale for x in position],
-            scale=scale,
+            position=[x * WORLD_SCALE/4.025 for x in position],
+            scale=WORLD_SCALE/4.025,
             model='sphere',
             collider='box',
             texture='l0',
             color=color.white,
         )
-        for wall in scene.walls:
-            if wall.intersects(self).hit:
-                destroy(wall)
+        # make sub-explosions same size as main one
+        if str(self.parent) != "render/scene/bomb":
+            self.scale *= 2
+            self.position *= 2
+        # avoiding of infinit recurrency
+        if str(self.parent) == "render/scene/bomb":
+            # on default allow propagation in all directions
+            x_for = True
+            x_bac = True
+            z_for = True
+            z_bac = True
+            # propagation area depend on user explode_range
+            for i in range(1, owner.explode_range):
+                # for each direction check if current propagation range make a collide...
+                # ...if it does destroy hit wall and turn of propagation in analyzed direction
+                if x_for:
+                    Explosion(self, owner, scene, (i, 0, 0))
+                    for wall in scene.walls:
+                        if wall.intersects(self).hit:
+                            destroy(wall)
+                            x_for = False
+                if x_bac:
+                    Explosion(self, owner, scene, (-i, 0, 0))
+                    for wall in scene.walls:
+                        if wall.intersects(self).hit:
+                            destroy(wall)
+                            x_bac = False
+                if z_for:
+                    Explosion(self, owner, scene, (0, 0, i))
+                    for wall in scene.walls:
+                        if wall.intersects(self).hit:
+                            destroy(wall)
+                            z_for = False
+                if z_bac:
+                    Explosion(self, owner, scene, (0, 0, -i))
+                    for wall in scene.walls:
+                        if wall.intersects(self).hit:
+                            destroy(wall)
+                            z_bac = False
         if scene.player.intersects(self).hit:
             application.quit()
         for enemy in scene.enemy_table:
@@ -30,17 +59,11 @@ class Explosion(Entity):
                 destroy(enemy)
         invoke(self.explode, delay=.5)
 
+    def explode(self):
+        destroy(self.parent)
+
 
 class Bomb(Entity):
-    def explode(self, owner, scene):
-        self.snd_explode.play()
-        Explosion(self, owner, scene, .9)
-        for i in range(4):
-            Explosion(self, owner, scene, .5 / (i + 1), (i * distance_x + 1, distance_y * i, 0))
-            Explosion(self, owner, scene, .5 / (i + 1), (-i * distance_x - 1, distance_y * i, 0))
-            Explosion(self, owner, scene, .5 / (i + 1), (0, distance_y * i, i * distance_x + 1))
-            Explosion(self, owner, scene, .5 / (i + 1), (0, distance_y * i, -i * distance_x - 1))
-
     def __init__(self, owner, scene, position=(0, 0, 0)):
         position[1] += (WORLD_SCALE - 1.2)
         super().__init__(
@@ -48,7 +71,7 @@ class Bomb(Entity):
             position=position,
             model='bomb',
             collider='box',
-            scale=3 * WORLD_SCALE,
+            scale=WORLD_SCALE*2,
             texture='tnt',
             color=color.white,
             highlight_color=color.olive,
@@ -56,3 +79,8 @@ class Bomb(Entity):
         self.prev_texture = self.texture
         self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, owner, scene, delay=2)
+
+    def explode(self, owner, scene):
+        Explosion(self, owner, scene)
+        owner.bombs_placed -= 1
+        self.snd_explode.play()

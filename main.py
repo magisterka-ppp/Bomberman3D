@@ -87,8 +87,10 @@ class Ground(Button):
             position = self.position - player.position
             if abs(position.x) < 20 and abs(position.z) < 20:
                 if key == 'left mouse down':
-                    Bomb(player, scene, position=self.position + mouse.normal)
-                    snd_putbomb.play()
+                    if player.bombs_placed < player.bombs_amount:
+                        Bomb(player, scene, position=self.position + mouse.normal)
+                        player.bombs_placed += 1
+                        snd_putbomb.play()
 
 
 class Wall(Button):
@@ -129,7 +131,8 @@ for z in range(world_size_z):
 enemy_table = [
     Bomber(scene, (1 * WORLD_SCALE, 1 * WORLD_SCALE, 1 * WORLD_SCALE)),
     Bomber(scene, (18 * WORLD_SCALE, 1 * WORLD_SCALE, 18 * WORLD_SCALE)),
-    Bomber(scene, (1 * WORLD_SCALE, 1 * WORLD_SCALE, 18 * WORLD_SCALE))]
+    Bomber(scene, (1 * WORLD_SCALE, 1 * WORLD_SCALE, 18 * WORLD_SCALE))
+]
 
 scene.walls = walls
 scene.app = app
