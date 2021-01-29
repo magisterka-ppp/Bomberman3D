@@ -3,18 +3,20 @@ from ursina import *
 from bomb import Bomb
 from constants import WORLD_SCALE
 
-
 class Bomber(Entity):
-    def __init__(self, scene, position=(0, 0, 0)):
+    def __init__(self, scene, position=(0, 0, 0), texture_color=None):
+        enemy_texture_colors = ["red", "green", "blue", "purple", "orange", "white", "black"]
+        if texture_color == None:
+            texture_color = random.choice(enemy_texture_colors)
         super().__init__(
-            parent=scene,
-            position=position,
-            model='enemy',
-            scale= WORLD_SCALE/4,
-            collider='box',
-            texture='GhostlingUV',
-            color=color.white,
-            rotation=(0, 0, 0)
+            parent = scene,
+            position = position,
+            model = 'enemy',
+            scale = WORLD_SCALE/4,
+            collider = 'box',
+            texture = texture_color,
+            color = color.white,
+            rotation = (0, 0, 0)
         )
         invoke(self.putBomb, delay=10)
 
