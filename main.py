@@ -111,5 +111,5 @@ if __name__ == '__main__':
 
     gameController = GameController()
     gameController.startGame()
-    gameController.restartGame()
+    #gameController.restartGame()
     app.run()
