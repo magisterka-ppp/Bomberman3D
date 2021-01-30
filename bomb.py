@@ -1,5 +1,5 @@
 from ursina import *
-from constants import WORLD_SCALE
+from constants import WORLD_SCALE, BUFF_CHANCE
 
 
 class Explosion(Entity):
@@ -13,6 +13,7 @@ class Explosion(Entity):
             texture='l0',
             color=color.white,
         )
+        self.gameController = gameController
         if parent is None and owner is None:
             return
 
@@ -35,24 +36,36 @@ class Explosion(Entity):
                     Explosion(self, owner, gameController, (i, 0, 0))
                     for wall in gameController.walls:
                         if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
                             destroy(wall)
                             x_for = False
                 if x_bac:
                     Explosion(self, owner, gameController, (-i, 0, 0))
                     for wall in gameController.walls:
                         if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
                             destroy(wall)
                             x_bac = False
                 if z_for:
                     Explosion(self, owner, gameController, (0, 0, i))
                     for wall in gameController.walls:
                         if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
                             destroy(wall)
                             z_for = False
                 if z_bac:
                     Explosion(self, owner, gameController, (0, 0, -i))
                     for wall in gameController.walls:
                         if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
                             destroy(wall)
                             z_bac = False
         if gameController.player.intersects(self).hit:
@@ -61,8 +74,11 @@ class Explosion(Entity):
             if enemy.intersects(self).hit and owner is not enemy:
                 destroy(enemy)
                 gameController.enemy_table.remove(enemy)
-                if len(gameController.enemy_table)  == 0:
+                if len(gameController.enemy_table) == 0:
                     gameController.panel.showWin()
+        #for buff in gameController.buff_table:
+        #    if buff.intersects(self).hit:
+        #        destroy(buff)
 
         invoke(self.explode, delay=.5)
 

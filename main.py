@@ -2,6 +2,7 @@ from ursina import *
 
 from blocks import Ground, Wall, HardWall
 from bomber import Bomber
+from buffs import Buff
 from constants import WORLD_SCALE
 from menu import InterfacePanel
 from myFirstPersonController import MyFirstPersonController
@@ -12,6 +13,17 @@ snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
 
 
 class GameController:
+    def loadBuff(self):
+        self.buff_table = []
+
+    def reloadBuff(self):
+        for buff in self.buff_table:
+            destroy(buff)
+        self.loadBuff()
+
+    def setBuff(self, position):
+        self.buff_table.append(Buff(self, position))
+
     def loadMap(self):
         self.current_map = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -93,6 +105,7 @@ class GameController:
         self.loadMenu()
         self.loadBlocks()
         self.loadEnemy()
+        self.loadBuff()
         self.app = app
         Skybox()
 
@@ -101,6 +114,7 @@ class GameController:
         self.reloadBlocks()
         self.reloadEnemy()
         self.reloadPlayer()
+        self.reloadBuff()
 
 if __name__ == '__main__':
     app = Ursina()

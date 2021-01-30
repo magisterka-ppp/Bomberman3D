@@ -1,6 +1,7 @@
 from ursina import *
 
 from bomb import Bomb
+from buffs import Buff
 from constants import WORLD_SCALE
 
 
@@ -43,6 +44,7 @@ class Wall(Button):
             texture='stone',
             color=color.white,
         )
+        self.gameController = gameController
 
 
 class HardWall(Button):
@@ -56,3 +58,4 @@ class HardWall(Button):
             texture='wood',
             color=color.white,
         )
+        self.gameController = gameController

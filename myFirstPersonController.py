@@ -11,4 +11,5 @@ class MyFirstPersonController(FirstPersonController):
         self.position = (19*WORLD_SCALE, 6*WORLD_SCALE, 19*WORLD_SCALE)
         self.bombs_amount = 1
         self.bombs_placed = 0
-        self.explode_range = 5
+        self.explode_range = 2
+        self.scale = WORLD_SCALE
