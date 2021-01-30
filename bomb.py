@@ -56,7 +56,7 @@ class Explosion(Entity):
                             destroy(wall)
                             z_bac = False
         if gameController.player.intersects(self).hit:
-            application.quit()
+            gameController.panel.showRestart()
         for enemy in gameController.enemy_table:
             if enemy.intersects(self).hit and owner is not enemy:
                 destroy(enemy)
