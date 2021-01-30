@@ -1,37 +1,6 @@
 # Create menu
 from ursina import Button, color, Cursor, camera, mouse, application
-from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel, EditorCamera
-
-
-class Menu(DropdownMenu):
-    def __init__(self, name):
-        super().__init__(
-            text=name,
-            buttons=(
-                DropdownMenuButton('New'),
-                DropdownMenu('Options', buttons=(
-                    DropdownMenuButton('Option a'),
-                    DropdownMenuButton('Option b'),
-                )),
-                DropdownMenu('Help'),
-                DropdownMenuButton('Exit'),
-            ),
-        )
-        self.is_open = False
-
-    def input(self, key):
-        if key == 'tab':
-            if self.is_open == False:
-                self.open()
-                self.is_open = True
-            else:
-                self.close()
-                self.is_open = False
-        if key == 'arrow_right':
-            ...
-
-    def update(self):
-        ...
+from ursina.prefabs.dropdown_menu import WindowPanel, EditorCamera
 
 
 class InterfacePanel(WindowPanel):
@@ -41,7 +10,7 @@ class InterfacePanel(WindowPanel):
             title='Game Over',
             popup = True,
             content=(
-                Button(text='Restart', color=color.azure, on_click=gameController.restartGame),
+                Button(text='Restart', color=color.azure, on_click=self.restart),
                 Button(text='Exit', color=color.azure, on_click=application.quit),
             ),
         )
@@ -54,19 +23,26 @@ class InterfacePanel(WindowPanel):
 
     def input(self, key):
         if key == 'r':
-            self.gameController.restartGame()
-        if key == 'tab':
-            if self.is_hidden():
-                camera.orthographic = True
-                self.show()
-                self.ec.enabled = True
-                mouse.locked = False
-                mouse.visible = False
-                self.cur.enable()
-            else:
-                self.hide()
-                camera.orthographic = False
-                self.ec.enabled = False
-                mouse.locked = True
-                mouse.visible = False
-                self.cur.disable()
+            self.restart()
+        if key == 'escape':
+            self.switchMenu()
+
+    def restart(self):
+        self.gameController.restartGame()
+        self.switchMenu()
+
+    def switchMenu(self):
+        if self.is_hidden():
+            camera.orthographic = True
+            self.show()
+            self.ec.enabled = True
+            mouse.locked = False
+            mouse.visible = False
+            self.cur.enable()
+        else:
+            self.hide()
+            camera.orthographic = False
+            self.ec.enabled = False
+            mouse.locked = True
+            mouse.visible = False
+            self.cur.disable()

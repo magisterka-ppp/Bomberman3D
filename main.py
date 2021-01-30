@@ -84,6 +84,7 @@ class GameController:
     def reloadEnemy(self):
         for enemy in self.enemy_table:
             destroy(enemy)
+        self.loadEnemy()
 
 
     def startGame(self):
