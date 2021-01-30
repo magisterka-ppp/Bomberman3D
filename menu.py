@@ -55,7 +55,7 @@ class InterfacePanel(WindowPanel):
     def input(self, key):
         if key == 'r':
             self.gameController.restartGame()
-        if key == 'tab':
+        if key == 'escape':
             if self.is_hidden():
                 camera.orthographic = True
                 self.show()
