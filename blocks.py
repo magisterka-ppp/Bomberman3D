@@ -27,6 +27,7 @@ class Ground(Button):
                     if player.bombs_placed < player.bombs_amount:
                         Bomb(player, self.gameController, position=self.position + mouse.normal)
                         player.bombs_placed += 1
+
                         from main import snd_putBomb
                         snd_putBomb.play()
 

@@ -12,6 +12,3 @@ class MyFirstPersonController(FirstPersonController):
         self.bombs_amount = 1
         self.bombs_placed = 0
         self.explode_range = 5
-
-    def input(self, key):
-        super().input(key)

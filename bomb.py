@@ -13,6 +13,9 @@ class Explosion(Entity):
             texture='l0',
             color=color.white,
         )
+        if parent is None and owner is None:
+            return
+
         # make sub-explosions same size as main one
         if str(self.parent) != "render/scene/bomb":
             self.scale *= 2
@@ -80,7 +83,8 @@ class Bomb(Entity):
         invoke(self.explode, owner, gameController, delay=2)
 
     def explode(self, owner, gameController):
-        Explosion(self, owner, gameController)
-        owner.bombs_placed -= 1
-        from main import snd_explode
-        snd_explode.play()
+        if owner is not None and self is not None:
+            Explosion(self, owner, gameController)
+            owner.bombs_placed -= 1
+            from main import snd_explode
+            snd_explode.play()
