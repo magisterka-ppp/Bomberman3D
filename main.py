@@ -7,6 +7,7 @@ from bomber import Bomber
 from constants import WORLD_SCALE
 from myFirstPersonController import MyFirstPersonController
 
+
 # Create menu
 class Menu(DropdownMenu):
     def __init__(self, name):
@@ -36,6 +37,24 @@ class Menu(DropdownMenu):
             ...
     def update(self):
         ...
+
+
+class InterfacePanel(WindowPanel):
+    def __init__(self):
+        super().__init__(
+            title='Game Over',
+            content=(
+                Button(text='Exit', color=color.azure),
+                Button(text='Restart', color=color.azure),
+            ),
+        )
+
+    def input(self, key):
+        if key == 'tab':
+            self.disable()
+        if key == 'space':
+            pane = InterfacePanel()
+
 
 class Skybox(Entity):
     def __init__(self):
@@ -138,6 +157,7 @@ if __name__ == '__main__':
     snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
     snd_putbomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
     player = MyFirstPersonController()
+    panel = InterfacePanel()
 
     walls = []
     for z in range(world_size_z):
@@ -157,6 +177,7 @@ if __name__ == '__main__':
     scene.walls = walls
     scene.app = app
     scene.player = player
+    scene.panel = panel
     scene.enemy_table = enemy_table
     skybox = Skybox()
 
