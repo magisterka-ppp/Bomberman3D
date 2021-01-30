@@ -3,27 +3,12 @@ from ursina import *
 from blocks import Ground, Wall, HardWall
 from bomber import Bomber
 from constants import WORLD_SCALE
+from menu import InterfacePanel
 from myFirstPersonController import MyFirstPersonController
 from skybox import Skybox
 
 snd_putBomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
 snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
-
-class InterfacePanel(WindowPanel):
-    def __init__(self):
-        super().__init__(
-            title='Game Over',
-            content=(
-                Button(text='Exit', color=color.azure),
-                Button(text='Restart', color=color.azure),
-            ),
-        )
-
-    def input(self, key):
-        if key == 'tab':
-            self.disable()
-        if key == 'space':
-            pane = InterfacePanel()
 
 
 if __name__ == '__main__':

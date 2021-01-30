@@ -1,5 +1,6 @@
 # Create menu
-from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu
+from ursina import Button, color
+from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel
 
 
 class Menu(DropdownMenu):
@@ -31,3 +32,19 @@ class Menu(DropdownMenu):
 
     def update(self):
         ...
+
+class InterfacePanel(WindowPanel):
+    def __init__(self):
+        super().__init__(
+            title='Game Over',
+            content=(
+                Button(text='Exit', color=color.azure),
+                Button(text='Restart', color=color.azure),
+            ),
+        )
+
+    def input(self, key):
+        if key == 'tab':
+            self.disable()
+        if key == 'space':
+            pane = InterfacePanel()
