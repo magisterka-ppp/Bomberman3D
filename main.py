@@ -111,4 +111,5 @@ if __name__ == '__main__':
     gameController = GameController()
     gameController.startGame()
     #gameController.restartGame()
+    NoclipMode(speed=10, require_key='shift')
     app.run()

@@ -1,2 +1,1 @@
 WORLD_SCALE = 2
-b = 1
