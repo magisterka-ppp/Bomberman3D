@@ -1,4 +1,5 @@
 from ursina import *
+from ursina import mouse
 
 from blocks import Ground, Wall, HardWall
 from bomber import Bomber
@@ -44,6 +45,7 @@ if __name__ == '__main__':
 
     window.fps_counter.enabled = True
     window.exit_button.visible = False
+
 
     player = MyFirstPersonController()
     panel = InterfacePanel()
