@@ -41,7 +41,7 @@ class InterfacePanel(WindowPanel):
             title='Game Over',
             popup = True,
             content=(
-                Button(text='Restart', color=color.azure, on_click=gameController.restartGame),
+                Button(text='Restart', color=color.azure, on_click=self.restart),
                 Button(text='Exit', color=color.azure, on_click=application.quit),
             ),
         )
@@ -52,9 +52,18 @@ class InterfacePanel(WindowPanel):
         self.cur.disable()
         self.hide()
 
+    def restart(self):
+        self.gameController.restartGame()
+        self.hide()
+        camera.orthographic = False
+        self.ec.enabled = False
+        mouse.locked = True
+        mouse.visible = False
+        self.cur.disable()
+
     def input(self, key):
         if key == 'r':
-            self.gameController.restartGame()
+            self.restart()
         if key == 'escape':
             if self.is_hidden():
                 camera.orthographic = True
