@@ -1,5 +1,5 @@
 # Create menu
-from ursina import Button, color, Cursor, camera, mouse
+from ursina import Button, color, Cursor, camera, mouse, application
 from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel, EditorCamera
 
 
@@ -41,8 +41,8 @@ class InterfacePanel(WindowPanel):
             title='Game Over',
             popup = True,
             content=(
-                Button(text='Exit', color=color.azure),
-                Button(text='Restart', color=color.azure),
+                Button(text='Restart', color=color.azure, on_click=gameController.restartGame),
+                Button(text='Exit', color=color.azure, on_click=application.quit),
             ),
         )
         self.gameController = gameController
@@ -53,8 +53,6 @@ class InterfacePanel(WindowPanel):
         self.hide()
 
     def input(self, key):
-        if key == 'escape':
-            exit()
         if key == 'r':
             self.gameController.restartGame()
         if key == 'tab':
