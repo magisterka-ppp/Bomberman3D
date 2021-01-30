@@ -4,7 +4,7 @@ from constants import WORLD_SCALE
 
 
 class Bomber(Entity):
-    def __init__(self, scene, position=(0, 0, 0), texture_color=None):
+    def __init__(self, gameController, position=(0, 0, 0), texture_color=None):
         enemy_texture_colors = ["red", "green", "blue", "purple", "orange", "white", "black"]
         if texture_color is None:
             texture_color = random.choice(enemy_texture_colors)
@@ -22,6 +22,7 @@ class Bomber(Entity):
             explode_range = 2,
             mem_position = [0, 0, 0],
         )
+        self.gameController = gameController
 
     def putBomb(self):
         if self.is_empty():
@@ -30,7 +31,7 @@ class Bomber(Entity):
         if abs(self.mem_position[0] - self.position.x) < 0.8 and abs(self.mem_position[2] - self.position.z) < 0.8:
             return
         if self.bombs_placed < self.bombs_amount:
-            Bomb(self, scene, position=self.mem_position)
+            Bomb(self, self.gameController, position=self.mem_position)
             self.bombs_placed += 1
 
     def update(self):

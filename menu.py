@@ -1,6 +1,6 @@
 # Create menu
 from ursina import Button, color, Cursor, camera, mouse
-from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel, EditorCamera, Entity
+from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel, EditorCamera
 
 
 class Menu(DropdownMenu):
@@ -33,8 +33,9 @@ class Menu(DropdownMenu):
     def update(self):
         ...
 
+
 class InterfacePanel(WindowPanel):
-    def __init__(self):
+    def __init__(self, gameController):
         super().__init__(
 
             title='Game Over',
@@ -44,6 +45,7 @@ class InterfacePanel(WindowPanel):
                 Button(text='Restart', color=color.azure),
             ),
         )
+        self.gameController = gameController
         self.ec = EditorCamera(rotation_smoothing=2, enabled=False, rotation=(30,30,0))
         self.ec.enabled = False
         self.cur = Cursor()
@@ -51,6 +53,10 @@ class InterfacePanel(WindowPanel):
         self.hide()
 
     def input(self, key):
+        if key == 'escape':
+            exit()
+        if key == 'r':
+            self.gameController.restartGame()
         if key == 'tab':
             if self.is_hidden():
                 camera.orthographic = True

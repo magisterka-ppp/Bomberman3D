@@ -5,7 +5,7 @@ from constants import WORLD_SCALE
 
 
 class Ground(Button):
-    def __init__(self, scene, position=(0, 0, 0)):
+    def __init__(self, gameController, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
@@ -16,25 +16,23 @@ class Ground(Button):
             color=color.white,
             highlight_color=color.olive,
         )
-        self.scene = scene
+        self.gameController = gameController
 
     def input(self, key):
-        if key == 'escape':
-            exit()
-
+        player = self.gameController.player
         if self.hovered:
-            position = self.position - self.scene.player.position
+            position = self.position - player.position
             if abs(position.x) < 20 and abs(position.z) < 20:
                 if key == 'left mouse down':
-                    if self.scene.player.bombs_placed < self.scene.player.bombs_amount:
-                        Bomb(self.scene.player, self.scene, position=self.position + mouse.normal)
-                        self.scene.player.bombs_placed += 1
+                    if player.bombs_placed < player.bombs_amount:
+                        Bomb(player, self.gameController, position=self.position + mouse.normal)
+                        player.bombs_placed += 1
                         from main import snd_putBomb
                         snd_putBomb.play()
 
 
 class Wall(Button):
-    def __init__(self, scene, position=(0, 0, 0)):
+    def __init__(self, gameController, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
@@ -47,7 +45,7 @@ class Wall(Button):
 
 
 class HardWall(Button):
-    def __init__(self, scene, position=(0, 0, 0)):
+    def __init__(self, gameController, position=(0, 0, 0)):
         super().__init__(
             parent=scene,
             position=position,
