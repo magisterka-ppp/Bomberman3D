@@ -56,6 +56,7 @@ class GameController:
         self.walls = []
         self.ground = []
         self.hardWall = []
+        print('generate walls')
         for z in range(self.world_size_z):
             for x in range(self.world_size_x):
                 self.ground.append(Ground(self, (x * WORLD_SCALE, 0, z * WORLD_SCALE)))
@@ -84,6 +85,7 @@ class GameController:
         for enemy in self.enemy_table:
             destroy(enemy)
 
+
     def startGame(self):
         self.loadMap()
         self.loadPlayer()
@@ -96,7 +98,6 @@ class GameController:
     def restartGame(self):
         self.loadMap()
         self.reloadPlayer()
-        self.reloadMenu()
         self.reloadBlocks()
         self.reloadEnemy()
 
