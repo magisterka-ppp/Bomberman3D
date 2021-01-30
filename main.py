@@ -98,9 +98,9 @@ class GameController:
 
     def restartGame(self):
         self.loadMap()
-        self.reloadPlayer()
         self.reloadBlocks()
         self.reloadEnemy()
+        self.reloadPlayer()
 
 if __name__ == '__main__':
     app = Ursina()

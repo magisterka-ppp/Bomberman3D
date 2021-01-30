@@ -53,13 +53,14 @@ class InterfacePanel(WindowPanel):
         self.hide()
 
     def restart(self):
-        self.gameController.restartGame()
         self.hide()
         camera.orthographic = False
         self.ec.enabled = False
         mouse.locked = True
         mouse.visible = False
         self.cur.disable()
+        self.gameController.restartGame()
+
 
     def input(self, key):
         if key == 'r':
