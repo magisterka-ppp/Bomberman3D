@@ -9,6 +9,22 @@ from skybox import Skybox
 snd_putBomb = Audio('./snd/Pickup_Coin4.wav', pitch=1, loop=False, autoplay=False)
 snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
 
+class InterfacePanel(WindowPanel):
+    def __init__(self):
+        super().__init__(
+            title='Game Over',
+            content=(
+                Button(text='Exit', color=color.azure),
+                Button(text='Restart', color=color.azure),
+            ),
+        )
+
+    def input(self, key):
+        if key == 'tab':
+            self.disable()
+        if key == 'space':
+            pane = InterfacePanel()
+
 
 if __name__ == '__main__':
 
@@ -44,9 +60,8 @@ if __name__ == '__main__':
     window.fps_counter.enabled = True
     window.exit_button.visible = False
 
-    # Audio files
-    snd_bg = Audio('./snd/Factory.ogg', pitch=1, loop=True, autoplay=True)
     player = MyFirstPersonController()
+    panel = InterfacePanel()
 
     walls = []
     for z in range(world_size_z):
@@ -66,6 +81,7 @@ if __name__ == '__main__':
     scene.walls = walls
     scene.app = app
     scene.player = player
+    scene.panel = panel
     scene.enemy_table = enemy_table
     skybox = Skybox()
 
