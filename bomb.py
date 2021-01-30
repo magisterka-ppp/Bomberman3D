@@ -77,10 +77,10 @@ class Bomb(Entity):
             highlight_color=color.olive,
         )
         self.prev_texture = self.texture
-        self.snd_explode = Audio('./snd/Explosion4.wav', pitch=1, loop=False, autoplay=False)
         invoke(self.explode, owner, scene, delay=2)
 
     def explode(self, owner, scene):
         Explosion(self, owner, scene)
         owner.bombs_placed -= 1
-        self.snd_explode.play()
+        from main import snd_explode
+        snd_explode.play()
