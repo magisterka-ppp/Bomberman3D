@@ -60,8 +60,10 @@ class Explosion(Entity):
         for enemy in gameController.enemy_table:
             if enemy.intersects(self).hit and owner is not enemy:
                 destroy(enemy)
-                if not gameController.enemy_table:
+                gameController.enemy_table.remove(enemy)
+                if len(gameController.enemy_table)  == 0:
                     gameController.panel.showWin()
+
         invoke(self.explode, delay=.5)
 
     def explode(self):
