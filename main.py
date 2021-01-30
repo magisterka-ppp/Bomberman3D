@@ -55,6 +55,14 @@ DropdownMenu('Menu', buttons=(
     DropdownMenuButton('Exit'),
 ))
 
+menu = WindowPanel(
+    title='Game Over',
+    content=(
+        Button(text='Exit', color=color.azure),
+        Button(text='Restart', color=color.azure),
+        ),
+    )
+menu.enabled = True
 
 class Skybox(Entity):
     def __init__(self):
@@ -91,6 +99,8 @@ class Ground(Button):
                         Bomb(player, scene, position=self.position + mouse.normal)
                         player.bombs_placed += 1
                         snd_putbomb.play()
+        if key == 'tab':
+            menu.disable()
 
 
 class Wall(Button):
