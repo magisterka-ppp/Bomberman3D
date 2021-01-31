@@ -17,68 +17,22 @@ class Explosion(Entity):
         if parent is None and owner is None:
             return
 
-        # make sub-explosions same size as main one
-        if str(self.parent) != "render/scene/bomb":
-            self.scale *= 2
-            self.position *= 2
-        # avoiding of infinit recurrency
-        if str(self.parent) == "render/scene/bomb":
-            # on default allow propagation in all directions
-            x_for = True
-            x_bac = True
-            z_for = True
-            z_bac = True
-            # propagation area depend on user explode_range
-            for i in range(1, owner.explode_range):
-                # for each direction check if current propagation range make a collide...
-                # ...if it does destroy hit wall and turn of propagation in analyzed direction
-                if x_for:
-                    Explosion(self, owner, gameController, (i, 0, 0))
-                    for wall in gameController.walls:
-                        if wall.intersects(self).hit:
-                            buffChance = random.randrange(1, 100)
-                            if buffChance <= BUFF_CHANCE:
-                                self.gameController.setBuff(wall.position)
-                            destroy(wall)
-                            x_for = False
-                if x_bac:
-                    Explosion(self, owner, gameController, (-i, 0, 0))
-                    for wall in gameController.walls:
-                        if wall.intersects(self).hit:
-                            buffChance = random.randrange(1, 100)
-                            if buffChance <= BUFF_CHANCE:
-                                self.gameController.setBuff(wall.position)
-                            destroy(wall)
-                            x_bac = False
-                if z_for:
-                    Explosion(self, owner, gameController, (0, 0, i))
-                    for wall in gameController.walls:
-                        if wall.intersects(self).hit:
-                            buffChance = random.randrange(1, 100)
-                            if buffChance <= BUFF_CHANCE:
-                                self.gameController.setBuff(wall.position)
-                            destroy(wall)
-                            z_for = False
-                if z_bac:
-                    Explosion(self, owner, gameController, (0, 0, -i))
-                    for wall in gameController.walls:
-                        if wall.intersects(self).hit:
-                            buffChance = random.randrange(1, 100)
-                            if buffChance <= BUFF_CHANCE:
-                                self.gameController.setBuff(wall.position)
-                            destroy(wall)
-                            z_bac = False
         if gameController.player.intersects(self).hit:
             gameController.panel.showRestart()
         for enemy in gameController.enemy_table:
-            if enemy.intersects(self).hit and owner is not enemy:
-                destroy(enemy)
-                gameController.enemy_table.remove(enemy)
-                if len(gameController.enemy_table) == 0:
-                    gameController.panel.showWin()
-        #for buff in gameController.buff_table:
-        #    if buff.intersects(self).hit:
-        #        destroy(buff)
+            if enemy.intersects(self).hit:
+                if owner is enemy:
+                    owner.stunned = True
+                    invoke(owner.after_stun, delay=1)
+                else:
+                    destroy(enemy)
+                    gameController.enemy_table.remove(enemy)
+                    if len(gameController.enemy_table) == 0:
+                        gameController.panel.showWin()
+        for buff in gameController.buff_table:
+            if buff.intersects(self).hit:
+                gameController.buff_table.remove(buff)
+                destroy(buff)
 
         invoke(self.explode, delay=.5)
 
@@ -100,11 +54,57 @@ class Bomb(Entity):
             highlight_color=color.olive,
         )
         self.prev_texture = self.texture
-        invoke(self.explode, owner, gameController, delay=2)
+        self.gameController = gameController
+        invoke(self.explode, owner, delay=2)
 
-    def explode(self, owner, gameController):
+    def explode(self, owner):
         if owner is not None and self is not None:
-            Explosion(self, owner, gameController)
             owner.bombs_placed -= 1
             from main import snd_explode
             snd_explode.play()
+            Explosion(self, owner, self.gameController)
+            # on default allow propagation in all directions
+            x_for = True
+            x_bac = True
+            z_for = True
+            z_bac = True
+            # propagation area depend on user explode_range
+            for i in range(1, owner.explode_range):
+                # for each direction check if current propagation range make a collide...
+                # ...if it does destroy hit wall and turn of propagation in analyzed direction
+                if x_for:
+                    Explosion(self, owner, self.gameController, (i, 0, 0))
+                    for wall in self.gameController.walls:
+                        if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
+                            destroy(wall)
+                            x_for = False
+                if x_bac:
+                    Explosion(self, owner, self.gameController, (-i, 0, 0))
+                    for wall in self.gameController.walls:
+                        if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
+                            destroy(wall)
+                            x_bac = False
+                if z_for:
+                    Explosion(self, owner, self.gameController, (0, 0, i))
+                    for wall in self.gameController.walls:
+                        if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
+                            destroy(wall)
+                            z_for = False
+                if z_bac:
+                    Explosion(self, owner, self.gameController, (0, 0, -i))
+                    for wall in self.gameController.walls:
+                        if wall.intersects(self).hit:
+                            buffChance = random.randrange(1, 100)
+                            if buffChance <= BUFF_CHANCE:
+                                self.gameController.setBuff(wall.position)
+                            destroy(wall)
+                            z_bac = False

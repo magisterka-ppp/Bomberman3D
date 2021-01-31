@@ -1,6 +1,7 @@
 from ursina import *
 from bomb import Bomb
 from buffs import Buff
+import array
 from constants import WORLD_SCALE
 
 
@@ -18,40 +19,83 @@ class Bomber(Entity):
             texture = texture_color,
             color = color.white,
             rotation = (0, 0, 0),
-            bombs_amount = 1,
-            bombs_placed = 0,
-            explode_range = 2,
-            mem_position = [0, 0, 0],
         )
         self.gameController = gameController
+        self.bombs_amount = 1
+        self.bombs_placed = 0
+        self.explode_range = 2
+        self.mem_position = [0, 0, 0]
+        self.wait = False
+        self.stunned = False
+
+    def after_time(self):
+        self.wait = False
+
+    def after_stun(self):
+        self.stunned = False
 
     def putBomb(self):
         if self.is_empty():
             return
         # avoid enemy to stuck in bomb
-        if abs(self.mem_position[0] - self.position.x) < 0.8\
-                and abs(self.mem_position[1] - self.position.y) < 0.8 \
-                and abs(self.mem_position[2] - self.position.z) < 0.8:
+        if abs(self.mem_position[0] - self.position.x) < 0.8 and abs(self.mem_position[2] - self.position.z) < 0.8:
             return
-        if self.bombs_placed < self.bombs_amount:
+        if self.bombs_placed < self.bombs_amount and not self.wait:
             Bomb(self, self.gameController, position=self.mem_position)
             self.bombs_placed += 1
+            self.wait = True
+            invoke(self.after_time, delay=1)
 
     def update(self):
-        for buff in self.gameController.buff_table:
-            if buff.intersects(self).hit:
-                self.bombs_amount += buff.bombs_amount
-                self.explode_range += buff.explode_range
-                self.gameController.buff_table.remove(buff)
-                destroy(buff)
-                self.position += self.back * time.dt * 4
-                return
+        if not self.stunned:
+            # Why (doing the same part of work) code in 'buffs.py' doesn't work?
+            for buff in self.gameController.buff_table:
+                if buff.intersects(self).hit:
+                    buff.snd_buff_get.play()
+                    self.bombs_amount += buff.bombs_amount
+                    self.explode_range += buff.explode_range
+                    self.gameController.buff_table.remove(buff)
+                    destroy(buff)
 
-        ray = raycast(self.world_position, self.back, ignore=(self, Buff))
+            ray_bomb = raycast(self.world_position, self.back,
+                               ignore=([self] + self.gameController.buff_table + self.gameController.walls + self.gameController.hardWall + self.gameController.enemy_table),
+                               distance=0.5 + WORLD_SCALE / 2)
+            ray_enemy = raycast(self.world_position, self.back,
+                               ignore=([self] + self.gameController.buff_table + self.gameController.walls + self.gameController.hardWall),
+                               distance=WORLD_SCALE / 2)
+            ray_wall = raycast(self.world_position, self.back,
+                               ignore=([self] + self.gameController.buff_table + self.gameController.enemy_table),
+                               distance=WORLD_SCALE/2)
+            # enemy detect bomb
+            if ray_bomb.hit:
+                action = random.randrange(0, 1)
+                if action == 1:
+                    self.mem_position = [self.position.x, self.position.y - 1, self.position.z]
+                    invoke(self.putBomb, delay=0.5)
+                self.rotation_y += 90 + 90 * random.randrange(0, 2)
 
-        if ray.distance <= WORLD_SCALE/2:
-            self.rotation_y += 90 + 180 * random.randrange(0, 2)
-            self.mem_position = [self.position.x, self.position.y - 1, self.position.z]
-            invoke(self.putBomb, delay=0.5)
-            return
-        self.position += self.back * time.dt * 4
+            # enemy detect opponent
+            if ray_enemy.hit:
+                action = random.randrange(0, 10)
+                if action <= 7:
+                    self.mem_position = [self.position.x, self.position.y - 1, self.position.z]
+                    invoke(self.putBomb, delay=0.5)
+                self.rotation_y += 90 + 90 * random.randrange(0, 2)
+
+            # enemy detect wall
+            if ray_wall.hit:
+                action = random.randrange(1, 4)
+                if action == 1:
+                    self.rotation_y += 90 + 90 * random.randrange(0, 2)
+                elif action == 2:
+                    self.mem_position = [self.position.x, self.position.y - 1, self.position.z]
+                    invoke(self.putBomb, delay=0.5)
+                elif action == 3:
+                    self.mem_position = [self.position.x, self.position.y - 1, self.position.z]
+                    self.rotation_y += 90 + 90 * random.randrange(0, 2)
+                    invoke(self.putBomb, delay=0.5)
+                    return
+                elif action == 4:
+                    return
+
+            self.position += self.back * time.dt * 4
