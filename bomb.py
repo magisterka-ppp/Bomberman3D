@@ -16,8 +16,8 @@ class Explosion(Entity):
         self.gameController = gameController
         if parent is None and owner is None:
             return
-
-        if gameController.player.intersects(self).hit:
+        if gameController.player.intersects(self).hit and not gameController.panel.hardRestart:
+            gameController.snd_gameLose.play()
             gameController.panel.showRestart()
         for enemy in gameController.enemy_table:
             if enemy.intersects(self).hit:
@@ -27,13 +27,13 @@ class Explosion(Entity):
                 else:
                     destroy(enemy)
                     gameController.enemy_table.remove(enemy)
-                    if len(gameController.enemy_table) == 0:
+                    if len(gameController.enemy_table) == 0 and not gameController.panel.hardRestart:
+                        gameController.snd_gameWin.play()
                         gameController.panel.showWin()
         for buff in gameController.buff_table:
             if buff.intersects(self).hit:
                 gameController.buff_table.remove(buff)
                 destroy(buff)
-
         invoke(self.explode, delay=.5)
 
     def explode(self):
@@ -59,9 +59,8 @@ class Bomb(Entity):
 
     def explode(self, owner):
         if owner is not None and self is not None:
+            self.gameController.snd_explode.play()
             owner.bombs_placed -= 1
-            from main import snd_explode
-            snd_explode.play()
             Explosion(self, owner, self.gameController)
             # on default allow propagation in all directions
             x_for = True

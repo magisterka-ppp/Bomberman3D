@@ -1,6 +1,7 @@
 from ursina import *
 from constants import WORLD_SCALE
 
+
 class Buff(Entity):
     def __init__(self, gameController, position=(0, 0, 0)):
         type = random.randrange(1, 100)

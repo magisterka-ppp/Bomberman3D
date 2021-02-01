@@ -1,7 +1,6 @@
 from ursina import *
 
 from bomb import Bomb
-from buffs import Buff
 from constants import WORLD_SCALE
 
 
@@ -26,11 +25,9 @@ class Ground(Button):
             if abs(position.x) < 20 and abs(position.z) < 20:
                 if key == 'left mouse down':
                     if player.bombs_placed < player.bombs_amount:
+                        self.gameController.snd_putBomb.play()
                         Bomb(player, self.gameController, position=self.position + mouse.normal)
                         player.bombs_placed += 1
-
-                        from main import snd_putBomb
-                        snd_putBomb.play()
 
 
 class Wall(Button):

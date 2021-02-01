@@ -1,7 +1,5 @@
 from ursina import *
 from bomb import Bomb
-from buffs import Buff
-import array
 from constants import WORLD_SCALE
 
 
@@ -51,7 +49,7 @@ class Bomber(Entity):
             # Why (doing the same part of work) code in 'buffs.py' doesn't work?
             for buff in self.gameController.buff_table:
                 if buff.intersects(self).hit:
-                    buff.snd_buff_get.play()
+                    #buff.snd_buff_get.play()
                     self.bombs_amount += buff.bombs_amount
                     self.explode_range += buff.explode_range
                     self.gameController.buff_table.remove(buff)

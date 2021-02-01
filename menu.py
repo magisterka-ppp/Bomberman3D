@@ -1,11 +1,11 @@
 # Create menu
 from ursina import Button, color, Cursor, camera, mouse, application
-from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu, WindowPanel, EditorCamera
+from ursina.prefabs.dropdown_menu import WindowPanel, EditorCamera
+
 
 class InterfacePanel(WindowPanel):
     def __init__(self, gameController):
         super().__init__(
-
             title='Menu',
             content=(
                 Button(text='Restart', color=color.azure, on_click=self.restart),
