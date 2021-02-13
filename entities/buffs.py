@@ -9,12 +9,12 @@ class Buff(Entity):
             buff_texture = 'buff_bomb_amount'
             self.bombs_amount = 1
             self.explode_range = 0
-            self.snd_buff_get = Audio('./snd/buff_amount.wav', pitch=1, loop=False, autoplay=False)
+            self.snd_buff_get = Audio('../snd/buff_amount.wav', pitch=1, loop=False, autoplay=False)
         else:
             buff_texture = 'buff_enlarge_range'
             self.bombs_amount = 0
             self.explode_range = 1
-            self.snd_buff_get = Audio('./snd/buff_range.wav', pitch=1, loop=False, autoplay=False)
+            self.snd_buff_get = Audio('../snd/buff_range.wav', pitch=1, loop=False, autoplay=False)
         super().__init__(
             parent=scene,
             position=position,

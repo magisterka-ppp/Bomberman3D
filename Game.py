@@ -1,12 +1,12 @@
 from ursina import *
 
-from blocks import Ground, Wall, HardWall
-from bomber import Bomber
-from buffs import Buff
+from entities.blocks import Ground, Wall, HardWall
+from entities.bomber import Bomber
+from entities.buffs import Buff
 from constants import WORLD_SCALE
-from menu import InterfacePanel
-from myFirstPersonController import MyFirstPersonController
-from skybox import Skybox
+from entities.menu import InterfacePanel
+from entities.myFirstPersonController import MyFirstPersonController
+from entities.skybox import Skybox
 
 
 class GameController:

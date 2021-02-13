@@ -1,5 +1,5 @@
 from ursina import *
-from bomb import Bomb
+from entities.bomb import Bomb
 from constants import WORLD_SCALE
 
 
