@@ -15,7 +15,10 @@ This project is a realization of 3D game in Python programing language. Game env
 Platforms:
 - Windows
 - Linux
-Game require Python environment (suggested version is 3.8 or higher). Setup can be downloaded from: https://www.python.org/downloads/.
+Game require Python environment (suggested version is 3.8 or higher). Setup can be downloaded from:
+
+    https://www.python.org/downloads/
+    
 After setup Python environment on your OS you need to install Ursina engine. Simple way is to install it via Python command line using command `pip install ursina`.
 
 ## License
