@@ -11,6 +11,8 @@ This project is a realization of 3D game in Python programing language. Game env
 - Destroy enemies by blowing them up (remember that placed bomb is useful as an obstacle even before explosion).
 - Create your own map. It can by only a map quarter if you wish it to be symmetric in horizontal axis.
 
+![Game screenshot](./screenshots/game.png)
+
 ## Requirements
 Platforms:
 - Windows
