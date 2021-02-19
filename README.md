@@ -15,6 +15,7 @@ This project is a realization of 3D game in Python programing language. Game env
 Platforms:
 - Windows
 - Linux
+
 Game require Python environment (suggested version is 3.8 or higher). Setup can be downloaded from:
 
     https://www.python.org/downloads/
