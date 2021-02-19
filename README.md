@@ -1,6 +1,13 @@
 # Bomberman3D
 Implementation of popular game genre for 3 dimensional space, based on Ursina engine for Python environment.
 
+## Table of Contents
+* [General info](#general-info)
+* [Game features](#game-features)
+* [Requirements](#requirements)
+* [Setup](#setup)
+* [License](#license)
+
 ## Genral info
 This project is a realization of 3D game in Python programing language. Game environment is created using Ursina engine available for Python from version 3.6. Main aim of the project is to show the posibilites of Ursina engine in developing a simply computer games, also to present the methods of work with Ursina engine, for purpose of future projects.
 
@@ -21,6 +28,12 @@ Platforms:
 Game require Python environment (suggested version is 3.8 or higher). Setup can be downloaded from: https://www.python.org/downloads/.
     
 After setup Python environment on your OS you need to install Ursina engine. Simple way is to install it via Python command line using command `pip install ursina`.
+
+## Setup
+Clone or download project and run game via command line:
+```
+$ python Game.py
+```
 
 ## License
 Copyright 2021 magisterka-ppp
